@@ -1,78 +1,81 @@
-<head>
+@extends('layouts.app')
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SI AKADEMIK </title>
-
-    <!-- Custom fonts for this template-->
-    <link href="{{asset('vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="{{asset('/css/sb-admin-2.min.css') }}"rel="stylesheet">
-
-</head>
-<div class="row justify-content-center">
-    <div class="col-lg-4">
-
-
-        @if(session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close">
-        </button>
-        </div>
-        @endif
-
-        @if(session()->has('LoginError'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('LoginError') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close">
-        </button>
-        </div>
-        @endif
-
-
-        <main class="form-login w-100 m-auto">
-            <br>
-            <br>
-            <br>
-            <br>
-            <div class="text-center">
-                <h1 class="h2 mb-3 fw-font-font-weight-normal text-center col">Login</h1>
-                <h1 class="h6 mb-2 fw-font-weight-normal col-m-auto mt-auto">Welcome To Prosepera</h1>
-            </div>
-
-            <form action="/login" method="POST">
-                @csrf
-                <div class="form-floating mb-1">
-                    <input type="email" name="email" class="form-control @error('email')  is-invalid @enderror " id="email" placeholder="email@example.com" autofocus required  value="{{ old('email') }}">
-                    <label for="email">Email Address</label>
-                    @error('email')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="form-floating mb-3">
-                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
-                    <label for="password">Password</label>
-                </div>
-
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
-                <small class="d-block text-center mt-3">
-                    Not Register? <a href="/register">Register Now</a>
-                </small>
-            </form>
-
-        </main>
+@section('content')
+    <div class="row mx-3 my-1">
+        <h2 class="text-dark">DATA MATA PELAJARAN</h2>
     </div>
-</div>
-<p class="text-justify-left-0 mt-3">&copy; Prospera 2023</p>
+    {{-- alert --}}
+    @if (Session::has('success'))
+        <div id="successAlert" class="alert alert-success" role="alert">
+
+            <button id="closeButton" class="close-button" onclick="closeAlert()">&times;</button>
+        </div>
+    @endif
+
+    <script>
+        function closeAlert() {
+            document.getElementById('successAlert').style.display = 'none';
+        }
+    </script>
+    <div class="row">
+        <div class="col-md">
+            <a href="{{ route('matapelajaran.create') }}" class="btn btn-dark btn-sm mb-2 mx-3"><i
+                    class="fa fa-users"aria-hidden="true"></i>&nbsp;Tambah Data</a>
+            <a href="#" class="btn btn-success btn-sm mb-2"><i class="fa fa-print" aria-hidden="true"></i>&nbsp;Cetak
+                Data</a>
+            <div class="card shadow py-2 px-2">
+                <div class="card-header my-1 mx-1">
+                    <table id="example" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Mata Pelajaran</th>
+                                <th scope="col">Jenis Pembelajaran</th>
+                                <th scope="col">Jurusan</th>
+                                <th scope="col">Guru Pengajar</th>
+                                <th scope="col">Tahun Akademik</th>
+                                <th scope="col">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($matapelajaran as $matapelajaran)
+                                <tr>
+                                    <td class="align-middle">{{ $loop->index + 1 }}</td>
+                                    <td class="align-middle">{{ $matapelajaran->pelajaran }}</td>
+                                    <td class="align-middle">{{ $matapelajaran->pembelajaran }}</td>
+                                    <td class="align-middle">{{ $matapelajaran->jurusan['jurusan']}}</td>
+                                    <td class="align-middle">{{ $matapelajaran->guru['nama']}}</td>
+                                    <td class="align-middle">{{ $matapelajaran->tahun }}</td>
+                                    <td class="align-middle">
+                                        {{-- <div class="btn-group" role="group" aria-label="Basic example">
+                                            <a href="{{route(mata_pelajaran.edit)}}" type="button" class="btn btn-warning">Update</a>
+                                            <form action="{{ route('mata_pelajaran.destroy', $mata_pelajaran->id_mata_pelajaran) }}" method="POST"
+                                                class="btn btn-danger"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger p-0 mb-1">Delete</button>
+                                            </form>
+                                        </div> --}}
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <a href="{{ route('matapelajaran.edit', $matapelajaran->id_matapelajaran) }}" type="button"
+                                                class="btn btn-warning">Update</a>
+                                            <form action="{{ route('matapelajaran.destroy', $matapelajaran->id_matapelajaran) }}" method="POST">
+                                                {{-- cross site ruquest forgery memverifikasi bahwa pengguna yang membuat permintaan --}}
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn btn-danger"
+                                                    onclick="return confirm('Yakin Ingin Dihapus?')">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
