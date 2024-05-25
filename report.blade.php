@@ -12,38 +12,28 @@
             border: 1px;
         }
     </style>
-    <title>Cetak Jadwal Pelajaran</title>
+    <title>Cetak Data Jurusan</title>
 </head>
 
 <body>
     <div class="form-group">
-    <h1 align="center"><b>Laporan Data Jadwal Pelajaran</b></h1>
-    <p  align="center"><b>SI akademik</b></p>
-    <table class="static" align="center" rules="all" border="1px" style="width: 95%;">
-        <tr>
-            <th scope="col">No</th>
-            <th scope="col">Hari</th>
-            <th scope="col">Waktu</th>
-            <th scope="col">Jurusan</th>
-            <th scope="col">Kelas</th>
-            <th scope="col">Mata Pelajaran</th>
-        </tr>
-        @foreach ($jadwal as $jadwal)
+        <p align="center"><b>Laporan Data Jurusan</b></p>
+        <table class="static" align="center" rules="all" border="1px" style="width: 95%;">
             <tr>
-                <td class="align-middle">{{ $loop->index + 1 }}</td>
-                <td class="align-middle">{{ $jadwal->hari }}</td>
-                <td class="align-middle">{{ $jadwal->waktu }}</td>
-                <td class="align-middle">{{ $jadwal->jurusan['jurusan'] }}</td>
-                <td class="align-middle">{{ $jadwal->kelas['kelas'] }}</td>
-                <td class="align-middle">{{ $jadwal->matapelajaran['pelajaran'] }}</td>
+                <th scope="col">No</th>
+                <th scope="col">Name jurusan</th>
             </tr>
-        @endforeach
-    </table>
+            @foreach ($jurusan as $jurusan)
+                <tr>
+                    <td class="align-middle">{{ $loop->iteration }}</td>
+                    <td class="align-middle">{{ $jurusan->jurusan }}</td>
+                </tr>
+            @endforeach
+        </table>
     </div>
     <script type="text/javascript">
         window.print();
     </script>
-</body>
 </body>
 
 </html>
