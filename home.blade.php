@@ -90,7 +90,7 @@
                     <header>
                         <h1>Selamat Datang</h1>
                         <br>
-                        <h2>Di SMK NEGERI 1 SINGOSARI</h2>
+                        <h2>si akademik</h2>
                         <br>
                     </header>
             </div>
